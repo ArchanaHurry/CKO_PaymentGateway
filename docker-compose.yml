@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  paymentgateway:
+    image: ${DOCKER_REGISTRY-}paymentgateway
+    build:
+      context: .
+      dockerfile: PaymentGateway/Dockerfile
+
+  bankmockapi:
+    image: ${DOCKER_REGISTRY-}bankmockapi
+    build:
+      context: .
+      dockerfile: BankMockAPI/Dockerfile
+
