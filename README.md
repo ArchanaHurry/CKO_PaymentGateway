@@ -12,9 +12,25 @@ The Bank Mock API:
 
 	1. Returns a Unique identifier and a status that indicates whether the payment was successful.
 	
+# Assumptions/Constraints
+	1. Payment/Refund only have 2 states: Success or Failure.
+	2. Merchant sends his own bank account and the customer's payment card details for the transaction.
+	3. The logic of using Payment Card Number to determine the bank associated to then forward the transaction to it has not been implemented.
+	
 # The Project Main Solution Breakdown:
 
-	1. PaymentGateway 
+# 1. Databases/Tables
+	> Auth_Server:
+		Store the user merchant credentials.
+	> MerchantUsername
+		All the usernames for each merchant is listed.
+	> Transaction
+		Payment and refund transactions passing through the gateway are stored.
+
+NOTE:
+All these databases have been created in Microsoft SQL Server. Please do use the scripts found in the project (PaymentGateway/Script) to recreate the tables and then modify the ConnectionStrings in the appsettings.json file.
+
+# 2. PaymentGateway 
 		- Exposes 3 Endpoints:
 			1. POST ~/auth/token
 				Request access token.
@@ -62,7 +78,7 @@ The Bank Mock API:
 					}
 					
 			4. GET ~/GetTransaction?id=
-				Endpoint allows the user to search the transaction details stored in the gateway database using the gateway transaction ID.
+				Endpoint allows the user to search the transaction details stored in the gateway database using the 					gateway transaction ID.
 				
 				=> Header:
 					Key: Authorization, Value: Bearer + "access token generated"
@@ -80,8 +96,19 @@ The Bank Mock API:
 						"dateTime": "03/09/2019 17:24:54",
 						"status": "Processed"
 					}
-				
-			
-			
-	2. BankMockAPI
-	3. docker-compose
+					
+# 3. BankMockAPI
+		- Expose 2 APIs, for Payment and Refund. It returns a unique identifier that returns an OK response.
+	
+				=> Header:
+					Key: Cotnent-Type, Value: application/json
+				=> Body: 
+					{
+					    PayeeBankAccount = 1234567952364125 ,
+					    PayerCardNumber  = 482434234143534,
+					    ExpMonth         = 10,
+					    ExpYear          = 2036,
+					    CVV              = 952,
+					    Amount           = 35000,
+					    Currency         = "MUR" 
+					}
