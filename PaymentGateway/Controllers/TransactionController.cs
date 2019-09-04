@@ -197,7 +197,6 @@ namespace PaymentGateway.Controllers
             }
         }
 
-        // ~/GetTransactionBy/{id}
         // ~/GetTransaction?id=
         [HttpGet("~/GetTransaction")]
         public async Task<ActionResult<string>> GetTransactionById(Guid id)
